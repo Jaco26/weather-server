@@ -8,7 +8,8 @@ edition = "2018"
 
 [dependencies]
 actix-web = { version = "3", features = ["openssl"] }
+openssl = "0.10.35"
 serde = { version = "1.0.126", features = ["derive"] }
 serde_json = "1.0"
-reqwest = { version = "0.11", features = ["json"] }
-openssl = "0.10.35"
+sqlx = { version = "0.5", features = ["postgres", "chrono", "uuid", "runtime-actix-native-tls"] }
+uuid = { version = "0.8", features = ["serde", "v4"] }

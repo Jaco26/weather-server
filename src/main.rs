@@ -32,12 +32,14 @@ fn lookup_coords(zips: web::Data<ZipCodes>, zip_code: &str) -> (String, String) 
 }
 
 
-async fn get_coords(zips: web::Data<ZipCodes>, web::Path((zip,)): web::Path<(String,)>) -> HttpResponse {
+async fn get_coords(zips: web::Data<ZipCodes>, path: web::Path<(String,)>) -> HttpResponse {
+    let (zip,) = path.into_inner();
     HttpResponse::Ok().json(lookup_coords(zips, &zip))
 }
 
 
-async fn get_forecast(zips: web::Data<ZipCodes>, web::Path((zip,)): web::Path<(String,)>) -> Result<HttpResponse> {
+async fn get_forecast(zips: web::Data<ZipCodes>, path: web::Path<(String,)>) -> Result<HttpResponse> {
+    let (zip,) = path.into_inner();
     let (lat, lng) = lookup_coords(zips, &zip);
 
     let points = noaa_api::get_points(&lat, &lng)
@@ -51,7 +53,8 @@ async fn get_forecast(zips: web::Data<ZipCodes>, web::Path((zip,)): web::Path<(S
     Ok(HttpResponse::Ok().json(forecast))
 }
 
-async fn get_hourly_forecast(zips: web::Data<ZipCodes>, web::Path((zip,)): web::Path<(String,)>) -> Result<HttpResponse> {
+async fn get_hourly_forecast(zips: web::Data<ZipCodes>, path: web::Path<(String,)>) -> Result<HttpResponse> {
+    let (zip,) = path.into_inner();
     let (lat, lng) = lookup_coords(zips, &zip);
     
     let points = noaa_api::get_points(&lat, &lng)
